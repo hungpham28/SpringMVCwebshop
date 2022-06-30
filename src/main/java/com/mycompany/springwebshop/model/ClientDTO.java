@@ -27,6 +27,8 @@ public class ClientDTO {
     
     private List<ItemCartEntity> itemcartList;
     
+    private String totalMoneyCart;
+    
 	public ClientDTO(ClientEntity client) {
 		if(client!=null) {
 			this.setId(client.getId());
@@ -36,7 +38,12 @@ public class ClientDTO {
 			this.setAddress(client.getAddress());
 			this.setPhone(client.getPhone());
 			this.setImage(client.getImage());
+//			List<ItemCartEntity> itemList=client.getItemcartList();
 			this.setItemcartList(client.getItemcartList());
+//			long total=0;
+//			for (ItemCartEntity item: itemList) {
+//				total+=item.getQuantity()*(item.getProduct().getSalePrice()
+//			}
 		}
 	}
 
@@ -107,6 +114,14 @@ public class ClientDTO {
 
 	public void setItemcartList(List<ItemCartEntity> itemcartList) {
 		this.itemcartList = itemcartList;
+	}
+
+	public String getTotalMoneyCart() {
+		return totalMoneyCart;
+	}
+
+	public void setTotalMoneyCart(String totalMoneyCart) {
+		this.totalMoneyCart = totalMoneyCart;
 	}
     
     

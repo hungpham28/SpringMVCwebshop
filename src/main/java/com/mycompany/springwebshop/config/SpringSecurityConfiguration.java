@@ -30,7 +30,7 @@ public class SpringSecurityConfiguration extends WebSecurityConfigurerAdapter {
         http
                 .authorizeRequests()
                 .antMatchers("/","/Trangchu","/SignUpIn").permitAll()
-                .antMatchers("/Product/**").hasRole("USER")
+                .antMatchers("/Product/**").hasRole("CLIENT")
                 .anyRequest().authenticated()
                 .and()
                 .httpBasic();
@@ -41,14 +41,15 @@ public class SpringSecurityConfiguration extends WebSecurityConfigurerAdapter {
      
                 // Submit URL của trang login
                 .loginProcessingUrl("/j_spring_security_check") // Submit URL
-                .loginPage("/SignUpIn")//
+                .loginPage("/SignUpIn").successHandler(null)//
                 .defaultSuccessUrl("/Trangchu")//
                 .failureUrl("/SignUpIn?error=true")//
                 .usernameParameter("username")//
                 .passwordParameter("password")
             
                 // Cấu hình cho Logout Page.
-                .and().logout().logoutUrl("/logout").logoutSuccessUrl("/logoutSuccessful");
+                .and().logout().logoutUrl("/logout").logoutSuccessUrl("/logoutSuccessful")
+                .and().csrf().disable();
     }
 
     @Override

@@ -83,7 +83,8 @@
     <div class="container" id="containerIn" style="width: 500px; min-height: 440px;">
         
       <div class="form-container sign-in-container" style="width: 100%;">
-          <form action="${pageContext.request.contextPath}/j_spring_security_check" method="post" >
+      
+          <form action="<c:url value="/j_spring_security_check"/>" method="post" >
               <h1>Sign Up For Client</h1>
               <div class="social-container">
                   <a href="#" class="social"><i class="fab fa-facebook-f"></i></a>
@@ -94,6 +95,7 @@
               <input type="text" style="display: none" name="account" value="login"/>
               <input type="text" placeholder="User" name="username" required/>
               <input type="password" placeholder="Password" name="password" required/>
+              <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
               <button>Sign In</button>
           </form>
       </div>

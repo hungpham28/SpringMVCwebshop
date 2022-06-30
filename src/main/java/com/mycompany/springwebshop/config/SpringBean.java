@@ -22,4 +22,5 @@ public class SpringBean {
     public SessionBean sessionBean() {
     	return new SessionBean();
     }
+
 }

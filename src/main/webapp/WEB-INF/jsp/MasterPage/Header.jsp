@@ -5,7 +5,8 @@
 <%@page import="com.mycompany.springwebshop.entity.CategoryEntity"%>
 <%@page import="com.mycompany.springwebshop.entity.ClientEntity"%>
 <%@page import="java.util.ArrayList"%>
-
+<%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
     <link rel="stylesheet" href="<c:url value="/resources/style/assets/css/bullma_css.css"/>">
@@ -251,7 +252,7 @@ padding: 0;
                 </div>
               </div>
             </div>
-            <a class="navbar-item " href="http://localhost:8080/springWebShop/Trangchu/GioHang" style="color: #FFFF ;">
+            <a class="navbar-item " href="<c:url value="/User/Cart"/>"  style="color: #FFFF ;">
               <span <%= client==null||itemsCartList.size()==0 ? "class=\"close\"":""%> style="height: 18px;background-color: darkorange; width: 18px; border-radius: 50%;position: absolute; left: 0;top: 10px; font-size: small;
               font-size: small;text-align: center;">
               <%if(client!=null){
@@ -283,6 +284,12 @@ padding: 0;
                     </span>
                   </a>
       
+                </p>
+                <p class="control ">
+                  <a class="button is-primary account" href="<c:url value="/logout"/>">
+
+                    <span style="color: #ee4d2d;">Đăng Xuất <i class="fa fa-sign-out" aria-hidden="true" style="font-size: 18px; display:contents"></i></span>
+                  </a>
                 </p>
                 <p class="control ">
                   <a class="button is-primary account" href="

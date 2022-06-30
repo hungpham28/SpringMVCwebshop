@@ -14,12 +14,18 @@ import com.mycompany.springwebshop.service.ClientService;
 import com.mycompany.springwebshop.service.CommentService;
 import com.mycompany.springwebshop.service.OwnerShopService;
 import com.mycompany.springwebshop.service.ProductService;
+import com.mycompany.springwebshop.until.FormNumber;
+
+import java.security.Principal;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -42,6 +48,9 @@ public class HomeController {
     private CommentService commentService;
     
     @Autowired
+    private ClientService clientService;
+    
+    @Autowired
     private SessionBean session;
     
     @RequestMapping(value = {"/","/Trangchu"}, method = RequestMethod.GET)
@@ -62,6 +71,11 @@ public class HomeController {
         return mav;
     }
 
+    @PostMapping("/j_spring_security_check")
+	public void postLogin(Authentication authentication,Principal principal,HttpSession httpSession) {
+    	System.out.println(clientService.getUserDTOByUsername(principal.getName()));
+    		session.setAttribute("AccountDetatils", clientService.getUserDTOByUsername(principal.getName()));
+	}
     @RequestMapping(value = "/SignUpIn", method = RequestMethod.GET)
     public ModelAndView LoginRegistPage() {
         ModelAndView mav = new ModelAndView("SignUp-In/SignUpIn");
@@ -78,6 +92,15 @@ public class HomeController {
     @RequestMapping(value = "/403", method = RequestMethod.GET)
     public String accessDenied() {   
         return "Eror";
+    }
+    @GetMapping("/User/Cart")
+    public ModelAndView CartPage() {
+        ModelAndView mav = new ModelAndView("ActionDataPage/Cart");
+        ClientDTO client=(ClientDTO) session.getAttribute("AccountDetatils");
+        mav.addObject("FormNumber",new FormNumber());
+        mav.addObject("subTotal",(long)0);
+        session.setAttribute("itemCartList", client.getItemcartList() );
+        return mav;
     }
 //    @RequestMapping(value = "/SignUpIn", method = RequestMethod.POST)
 //    public ModelAndView LoginRegistPostPage(HttpSession session,HttpServletRequest req) {

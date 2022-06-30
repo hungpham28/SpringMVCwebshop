@@ -1,12 +1,5 @@
-<%@page import="service.OwnerShopService"%>
-<%@page import="service.PaymentService"%>
-<%@page import="entity.Shop"%>
-<%@page import="service.ProductService"%>
-<%@page import="entity.Product"%>
-<%@page import="java.util.ArrayList"%>
-<%@page import="entity.Cart"%>
-<%@page import="service.CartServive"%>
-<%@page import="entity.Client"%>
+
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <!DOCTYPE html>
@@ -31,7 +24,7 @@
 </head>
 <body>
 
-  <%@ include file="/Pages/MasterPage/Header.jsp" %>
+  <%@ include file="MasterPage/Header.jsp"%>
   <link href="/WebShop/style/assets/css/notify.css" rel="stylesheet" />
   <link href="/WebShop/style/assets/css/stylePageCart.css" rel="stylesheet" />
       
@@ -43,19 +36,14 @@
 
   <div class="container">
     <section id="cart"> 
-    <%
-
-         	long subtotal=0;
-     		if(itemsCartList!=null)
-     		for(Cart cart: itemsCartList){
-     	Product product=ProductService.getProductByID(cart.getProductID(), "product");
-     	Shop shop=OwnerShopService.getShopByID(product.getShopID(), "shop");
-     	subtotal+=cart.getQuantity()*(Long.parseLong(product.getSalePrice()));
-     %>
+     <c:forEach var="cart" items="${itemCartList}">
+     <c:set var="product"  value="${cart.product}"></c:set>
+     <c:set var="shop" value="${product.shop}"/>
+     
       <article class="product">
         <header>
-          <a href="GioHang?<%="cartID="+cart.getCartID()+"&actionCart=remove" %>" class="remove">
-            <img src="<%=product.getUrl()%>" alt="">
+          <a href="GioHang?cartID=${cart.id}&actionCart=remove" class="remove">
+            <img src="${product.url}" alt="">
 
             <h3>Remove product</h3>
           </a>
@@ -63,59 +51,32 @@
 
         <div class="content">
 
-          <h1><%=shop.getNameShop() %></h1>
-		<%=product.getProduct() %>
+          <h1>${shop.nameShop}</h1>
+		${product.product}
           <div title="You have selected this product to be shipped in the color yellow." style="top: 0" class="color yellow"></div>
-          <div style="top: 43px" class="type small"><%=cart.getFeature() %></div>
+          <div style="top: 43px" class="type small">${cart.feature}</div>
         </div>
 
         <footer class="content">
-          <a href="GioHang?<%="cartID="+cart.getCartID()+"&actionCart=minus&quantity="+cart.getQuantity() %>"><span class="qt-minus">-</span></a>
-          <span class="qt"><%=cart.getQuantity() %></span>
-          <a href="GioHang?<%="cartID="+cart.getCartID()+"&actionCart=plus&quantity="+cart.getQuantity() %>"><span class="qt-plus">+</span></a>
+          <a href="GioHang?cartID=${cart.id}&actionCart=minus&quantity=cart.getQuantity()"><span class="qt-minus">-</span></a>
+          <span class="qt">${cart.quantity}</span>
+          <a href="GioHang?cartID=${cart.id}&actionCart=plus&quantity=${cart.quantity}"><span class="qt-plus">+</span></a>
 
           <h2 class="full-price">
-            <%= Product.formMoney(Long.toString(cart.getQuantity()*(Long.parseLong(product.getSalePrice())))) %>đ
+          	${FormNumber.formMoney(product.salePrice*cart.quantity)}đ
           </h2>
 
           <h2 class="price">
-            <%=Product.formMoney(product.getSalePrice()) %>đ
+          	${FormNumber.formMoney(product.salePrice)}đ
           </h2>
         </footer>
       </article>
-	<%
-		}
-	%>
-
+</c:forEach>
     </section>
 
   </div>
+<c:set var="tax" value />
 
-  <footer id="site-footer">
-    <div class="container clearfix">
-      <div class="left">
-        <h2 class="subtotal">Subtotal: <span><%=Product.formMoney(Long.toString(subtotal)) %></span>đ</h2>
-        <h3 class="tax">Taxes (2%): <span><%long tax=Math.round((subtotal*0.02));
-        	out.print( Product.formMoney(Long.toString(tax))); %></span>đ</h3>
-        <h3 class="shipping">Shipping: <span>20.000</span>đ</h3>
-      </div>
-
-      <div class="right">
-        <h1 class="total">Total: <span><%=subtotal!=0? Product.formMoney(Long.toString(tax+subtotal+20000)):0 %></span>đ</h1>
-        <%
-        	if(subtotal!=0){
-        	if(subtotal+tax+20000<=Long.parseLong(client.getMoney()))
-        			out.print("<button class=\"btn btn-success\" style=\"width: 100%\">Checkout</button>" );
-        	else
-        			out.print("<button class=\"btn btn-eror\" style=\"width: 100%\">Checkout</button>");
-        	}
-        	else out.print("<button class=\"btn\" style=\"width: 100%\">Checkout</button>");
-        %>
-      </div>
-      
-
-    </div>
-  </footer>
   <div id="notify" class="close">
   <div id="success-box" class="close">
   <span></span>
@@ -128,7 +89,7 @@
     </div>
     <div class="shadow scale"></div>
     <div class="message"><h1 class="alert">Success!</h1><p>Cảm ơn bạn đã sử dụng dịch vụ của chúng tôi!</p></div>
-    <form method="post"><input name="totalMoney" style="display: none" value="<%=subtotal+tax+20000%>"> <button class="button-box"><h1 class="green">Xác Nhận</h1></button></form> 
+    <form method="post"><input name="totalMoney" style="display: none" value="<%=0+0+20000%>"> <button class="button-box"><h1 class="green">Xác Nhận</h1></button></form> 
   </div>
   <div id="error-box" class="close">
     <div class="dot"></div>

@@ -23,8 +23,8 @@ public class SessionBean {
 	public void setAttribute(String namePara,Object object) {
 		this.session.put(namePara, object);
 	}
-	public void getAttribute(String namePara) {
-		this.session.get(namePara);
+	public Object getAttribute(String namePara) {
+		return this.session.get(namePara);
 	}
 	
 }
