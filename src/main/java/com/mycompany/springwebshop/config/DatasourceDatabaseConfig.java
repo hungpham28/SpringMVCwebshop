@@ -36,14 +36,10 @@ public class DatasourceDatabaseConfig {
     @Bean
     DataSource dataSource(){
         DriverManagerDataSource dataSource=new DriverManagerDataSource();
-        dataSource.setDriverClassName("com.mysql.jdbc.Driver");
-        dataSource.setUrl("jdbc:mysql://localhost:3306/springNew?createDatabaseIfNotExist=true&allowPublicKeyRetrieval=true&useSSL=false");
-        System.out.println(env.getProperty("ds.username"));
-        System.out.println(env.getProperty("ds.password"));
-        System.out.println(env.getProperty("ds.url"));
-        System.out.println(env.getProperty("ds.database-driver"));
-        dataSource.setUsername("root");
-        dataSource.setPassword("hung28092003");
+        dataSource.setDriverClassName(env.getProperty("ds.database-driver"));
+        dataSource.setUrl(env.getProperty("ds.url"));
+        dataSource.setUsername(env.getProperty("ds.username"));
+        dataSource.setPassword(env.getProperty("ds.password"));
         return dataSource;
     }
     @Bean
