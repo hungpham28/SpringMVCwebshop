@@ -95,66 +95,10 @@ public class HomeController {
     @GetMapping("/User/Cart")
     public ModelAndView CartPage() {
         ModelAndView mav = new ModelAndView("ActionDataPage/Cart");
-        mav.addObject("FormNumber",new FormNumber());
+        mav.addObject("FormNumber",new FormNumber());xScoped variables from session scope
         mav.addObject("subTotal",(long)0);
 
         return mav;
     }
-//    @RequestMapping(value = "/SignUpIn", method = RequestMethod.POST)
-//    public ModelAndView LoginRegistPostPage(HttpSession session,HttpServletRequest req) {
-//        ModelAndView mav = new ModelAndView("SignUp-In/SignUpIn");
-//	    req.setAttribute("eror", null);
-//        String accountRegist=(String)req.getParameter("account");
-//	    String user=null,pass = null;
-//	    HttpSession ses=req.getSession();
-//		user=(String)req.getParameter("user");
-//		pass=(String)req.getParameter("password");
-//	    switch (accountRegist) {
-//	    case "SignUp":
-//	    	switch (accountRegist) {
-//				case "client":
-//
-//					String name=(String)req.getParameter("fullName");
-//					String address=(String)req.getParameter("address");
-//					String phone=(String)req.getParameter("phone");
-//					String birthday=(String)req.getParameter("birthday");
-//					Client client=new Client(0,user,pass,"0",name,birthday,address,phone,null);
-//					ClientService.addClientToData(client, "client");
-//					ses.setAttribute("accesser","user");
-//					ses.setAttribute("user", client);
-//					resp.sendRedirect(req.getContextPath()+"/Trangchu");
-//					break;
-//				case "shop":
-//					String nameShop=(String)req.getParameter("nameShop");
-//					String urlAvatar=(String)req.getParameter("urlAvatar");
-//					Shop shop=new Shop(0, user, pass, nameShop,urlAvatar);
-//					OwnerShopService.addShopToData(shop, "shop");
-//					ses.setAttribute("accesser","shop");
-//					ses.setAttribute("shop", shop);
-//					resp.sendRedirect(req.getContextPath()+"/Trangchu/OwnerShop");
-//					break;
-//	    	}
-//	    	break;
-//	    }
-//        return mav;
-//    }
-//
-//    @RequestMapping(value = "/Trangchu", method = RequestMethod.GET)
-//    public ModelAndView homePage() {
-//        ModelAndView mav = new ModelAndView("home");
-//        return mav;
-//    }
-//
-//    @RequestMapping(value = "/Trangchu", method = RequestMethod.GET)
-//    public ModelAndView homePage() {
-//        ModelAndView mav = new ModelAndView("home");
-//        return mav;
-//    }
-//
-//    @RequestMapping(value = "/Trangchu", method = RequestMethod.GET)
-//    public ModelAndView homePage() {
-//        ModelAndView mav = new ModelAndView("home");
-//        return mav;
-//    }
 
 }
