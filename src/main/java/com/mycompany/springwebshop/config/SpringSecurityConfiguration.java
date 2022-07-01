@@ -35,18 +35,17 @@ public class SpringSecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .and()
                 .httpBasic();
         http.authorizeRequests().and().exceptionHandling().accessDeniedPage("/403");
-        
         // Cấu hình cho Login Form.
         http.authorizeRequests().and().formLogin()//
-     
+       
                 // Submit URL của trang login
                 .loginProcessingUrl("/j_spring_security_check") // Submit URL
                 .loginPage("/SignUpIn")//
-                .defaultSuccessUrl("/Trangchu")//
+                .defaultSuccessUrl("/loginSuccessStatus",true)//
                 .failureUrl("/SignUpIn?error=true")//
                 .usernameParameter("username")//
                 .passwordParameter("password")
-            
+                
                 // Cấu hình cho Logout Page.
                 .and().logout().logoutUrl("/logout").logoutSuccessUrl("/logoutSuccessful")
                 .and().csrf().disable();
@@ -60,7 +59,7 @@ public class SpringSecurityConfiguration extends WebSecurityConfigurerAdapter {
     @Bean
     @Override
     public UserDetailsService userDetailsService() {
-    	System.out.println(manageAccountService.getAllAccount());
         return new InMemoryUserDetailsManager(manageAccountService.getAllAccount());
     }
+    
 }

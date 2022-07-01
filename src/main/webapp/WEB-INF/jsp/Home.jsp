@@ -256,26 +256,28 @@
 									<div class="_2OiIy8 _3UxTxH"
 										style="font-size: 12px; margin-top: 8px;">
 										Đã bán ${product.numsold}
-										
+									</div>
 									<div class="price" style="font-size: 16px;">
 										<span class="_2SnSlL">${product.salePrice}</span><span
 											class="_1KHyQl">₫</span>
 									</div>
 								</div>
 								<div>
-									<%
-//                                	if(accesser!=null && accesser.equals("user") && client!=null)
-//                                		out.print(
-//                                			"<form method='post'>"
-//                                				+"<input style='display: none' name='clientID' value='"+client.getId()+"'>"
-//                                            	+"<input style='display: none' name='productID' value='"+product.getId()+"'>"
-//                                            	+"<button class='btn btn--buyticket js--btn--buyticket'>Buy Now<i class='fa fa-cart-plus' aria-hidden='true' style='margin-left: 5px;'></i></button>"
-//                                            +"</form>");
-//                                	else out.print("<button class='btn btn--buyticket js--btn--buyticket'>Buy Now<i class='fa fa-cart-plus' aria-hidden='true' style='margin-left: 5px;'></i></button>");
-                                %>
+								<sec:authorize access="hasRole('CLIENT')">
+									<form method='post'>
+									  <input style='display: none' name='clientID' value="${client.id}">
+	                                  <input style='display: none' name='productID' value="${product.id}">
+	                                  <button class='btn btn--buyticket js--btn--buyticket'>Buy Now<i class='fa fa-cart-plus' aria-hidden='true' style='margin-left: 5px;'></i></button>
+									</form>
+								</sec:authorize>
+								<sec:authorize access="!hasRole('CLIENT')">
+	                               <button class='btn btn--buyticket js--btn--buyticket' onclick="window.location.href="<c:url value="/SignUpIn" />"'>
+	                               Buy Now
+	                               <i class='fa fa-cart-plus' aria-hidden='true' style='margin-left: 5px;'></i>
+	                               </button>
+								</sec:authorize>
 
 								</div>
-							</div>
 						</div>
 						</div>
 					</a>

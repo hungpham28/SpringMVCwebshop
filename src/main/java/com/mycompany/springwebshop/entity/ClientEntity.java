@@ -4,7 +4,10 @@
  */
 package com.mycompany.springwebshop.entity;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
+
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -46,7 +49,7 @@ public class ClientEntity {
     @Column(name = "image")
     private String image;
     @OneToMany(mappedBy = "client", fetch = FetchType.EAGER)
-    private List<ItemCartEntity> itemcartList;
+    private Set<ItemCartEntity> itemcartList;
 
     @OneToOne(mappedBy = "client")
     private PaymentEntity payment;
@@ -128,11 +131,11 @@ public class ClientEntity {
         this.image = image;
     }
 
-    public List<ItemCartEntity> getItemcartList() {
+    public Set<ItemCartEntity> getItemcartList() {
         return itemcartList;
     }
 
-    public void setItemcartList(List<ItemCartEntity> itemcartList) {
+    public void setItemcartList(Set<ItemCartEntity> itemcartList) {
         this.itemcartList = itemcartList;
     }
 
@@ -151,6 +154,14 @@ public class ClientEntity {
     public void setComment(CommentEntity comment) {
         this.comment = comment;
     }
+
+	@Override
+	public String toString() {
+		return "ClientEntity [id=" + id + ", user=" + user + ", password=" + password + ", money=" + money
+				+ ", fullName=" + fullName + ", birthday=" + birthday + ", address=" + address + ", phone=" + phone
+				+ ", image=" + image + ", itemcartList=" + itemcartList + ", payment=" + payment + ", comment="
+				+ comment + "]";
+	}
 
     
 

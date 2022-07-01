@@ -25,6 +25,7 @@ public class ClientService {
 	private ClientRepository clientRepository;
 	
 	public  ClientDTO getUserDTOByUsername(String username) {
+//		System.out.println(clientRepository.findByUser(username));
 		return new ClientDTO(clientRepository.findByUser(username));
 	}
     public List<UserDetails> getAllAccountOfShop(){

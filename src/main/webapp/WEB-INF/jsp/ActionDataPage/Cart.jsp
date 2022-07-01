@@ -24,9 +24,9 @@
 </head>
 <body>
 
-  <%@ include file="MasterPage/Header.jsp"%>
-  <link href="/WebShop/style/assets/css/notify.css" rel="stylesheet" />
-  <link href="/WebShop/style/assets/css/stylePageCart.css" rel="stylesheet" />
+  <%@ include file="/WEB-INF/jsp/MasterPage/Header.jsp"%>
+  <link href="<c:url value="/resources/style/assets/css/notify.css"/>" rel="stylesheet" />
+  <link href="<c:url value="/resources/style/assets/css/stylePageCart.css"/>" rel="stylesheet" />
       
   <header id="site-header">
     <div class="container">
@@ -75,7 +75,7 @@
     </section>
 
   </div>
-<c:set var="tax" value />
+<c:set var="tax" value="0" />
 
   <div id="notify" class="close">
   <div id="success-box" class="close">

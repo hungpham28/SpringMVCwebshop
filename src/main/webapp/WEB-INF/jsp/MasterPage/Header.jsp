@@ -1,10 +1,4 @@
 
-<%@page import="com.mycompany.springwebshop.until.FormNumber"%>
-<%@page import="com.mycompany.springwebshop.entity.ItemCartEntity"%>
-<%@page import="java.util.List"%>
-<%@page import="com.mycompany.springwebshop.entity.CategoryEntity"%>
-<%@page import="com.mycompany.springwebshop.entity.ClientEntity"%>
-<%@page import="java.util.ArrayList"%>
 <%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
@@ -96,20 +90,7 @@ padding: 0;
 			}
       </style>
         <!-- navigation-header -->
-        <%
-        	HttpSession ses=request.getSession();
-        	String accesser=(String)ses.getAttribute("accesser");
-        	ClientEntity client=null;
-        	ArrayList<ItemCartEntity> itemsCartList=null;
-//        	ArrayList<Category> categoryList=new ArrayList<Category>();
-//        	categoryList=CategoryService.getCategorysInData("category");
-//        	if(accesser!=null && accesser.equals("user")){
-//        		client=(Client) ses.getAttribute("user");
-//        		client=client!=null ? ClientService.getClientById(client.getId(), "client"):null;
-//              	itemsCartList= client!=null ? (ArrayList<Cart>) CartServive.getItemsCartByClient(client.getId(), "cart"):null;
-//              	ses.setAttribute("itemsCartList", itemsCartList);
-//        	}
-        %>
+
 <nav class="navbar " style="background-color: #ee4d2d; ">
         <div class="navbar-brand"  >
           <a class="navbar-item" href="http://localhost:8080/springWebShop/Trangchu" style="color: #FFFF; font-size: 18px">
@@ -133,26 +114,16 @@ padding: 0;
                 <div class="container is-fluid">
                   <div class="columns">
                     <div class="column">
-                      <%
-                      	int count=0;
-                        
-                        List<CategoryEntity> categoryList=null;
-                        if (categoryList!=null)
-                      	for(CategoryEntity category: categoryList){
-                            count++;
-                      %>
-                      <a class="navbar-item" href="http://localhost:8080/springWebShop/Trangchu/ProductMenu?categoryID=<%=category.getId()%>">
+                    <c:forEach var="category" items="${categoryList}" varStatus="loop">
+                      <a class="navbar-item" href="http://localhost:8080/springWebShop/Trangchu/ProductMenu?categoryID=${category.getId}">
                         <div class="navbar-content">
-                          <p><%=category.getNameCategory() %></p>
+                          <p>${category.nameCategory}</p>
                         </div>
+                        <c:if test="${loop.index==4}">
+                        </div><div class="column">
+                        </c:if>
                       </a>
-                      <%
-                      	if(count==4) {
-                      		out.print("</div>\n<div class=\"column\">");
-                      		count=0;
-                      	}
-                      }
-                      %>
+                    </c:forEach>
                       </div>
                     
                   </div>
@@ -252,12 +223,11 @@ padding: 0;
                 </div>
               </div>
             </div>
-            <a class="navbar-item " href="<c:url value="/User/Cart"/>"  style="color: #FFFF ;">
-              <span <%= client==null||itemsCartList.size()==0 ? "class=\"close\"":""%> style="height: 18px;background-color: darkorange; width: 18px; border-radius: 50%;position: absolute; left: 0;top: 10px; font-size: small;
-              font-size: small;text-align: center;">
-              <%if(client!=null){
-              	out.print(itemsCartList.size());}
-              %></span>
+            <a class="navbar-item" href="<c:url value="/User/Cart"/>"  style="color: #FFFF ;">
+            <sec:authorize access="hasRole('CLIENT')">
+              <span style="height: 18px;background-color: darkorange; width: 18px; border-radius: 50%;position: absolute; left: 0;top: 10px; font-size: small;
+              font-size: small;text-align: center;">${itemCartList.size()}</span>
+              </sec:authorize>
               Giỏ Hàng<i class="fa fa-shopping-cart" aria-hidden="true" style="font-size: 18px;"></i>
             </a>
           </div>
@@ -275,43 +245,63 @@ padding: 0;
             <div class="navbar-item">
               <div class="field is-grouped">
                 <p class="control">
-                  <a  style="color: #ee4d2d!important;" class="bd-tw-button button" data-social-network="Twitter" data-social-action="tweet" data-social-target="" target="_blank" href="<%= client!=null? "http://localhost:8080/springWebShop/Trangchu/Payment":"https://twitter.com" %>">
+                
+                    <sec:authorize access="hasRole('CLIENT')">
+                    <a style="color: #ee4d2d!important;" class="bd-tw-button button" target="_blank" href="<c:url value="/Trangchu/Payment"/>">
+                    <span>${client.money}</span>
                     <span class="icon">
-                      <%if(client!=null) out.print("<i class=\"fa fa-money\" aria-hidden=\"true\"></i>");else out.print("<i class=\"fa fa-twitter\"></i>");%>
+                    	<i class="fa fa-money" aria-hidden="true"></i>
                     </span>
-                    <span >
-                        <%if(client!=null) out.print(FormNumber.formMoney(client.getMoney())+"đ");else out.print("Tweet");%>
+                    </a>
+                    
+                    </sec:authorize>
+                
+                    <sec:authorize access="!hasRole('CLIENT')">
+                    <a style="color: #ee4d2d!important;" class="bd-tw-button button" data-social-network="Twitter" data-social-action="tweet" data-social-target="" target="_blank">
+                    <i class="fa fa-twitter"></i>
+                     <span class="icon">
+                    	<i class="fa fa-twitter"></i>
                     </span>
-                  </a>
+                    <span>Tweet</span>
+                     </a>
+                    </sec:authorize>
+
+                 
       
                 </p>
-                <p class="control ">
+                <sec:authorize access="isAuthenticated()">
+                 <p class="control ">
                   <a class="button is-primary account" href="<c:url value="/logout"/>">
-
+					
                     <span style="color: #ee4d2d;">Đăng Xuất <i class="fa fa-sign-out" aria-hidden="true" style="font-size: 18px; display:contents"></i></span>
                   </a>
                 </p>
-                <p class="control ">
-                  <a class="button is-primary account" href="
-                 <%if(accesser!=null)
-                  switch(accesser){
-                	  case "user":
-                		  if(client!=null)
-                  		out.print("http://localhost:8080/springWebShop/Account");
-                		  else out.print("http://localhost:8080/springWebShop/SignUpIn");
-                  		break;
-                	  case "shop":
-                		 if(ses.getAttribute("shop")!=null)
-                    	out.print("http://localhost:8080/springWebShop/OwnerShop");
-                		 else out.print("http://localhost:8080/springWebShop/SignUpIn");
-                      	break;
-                	  default:
-                		  out.print("http://localhost:8080/springWebShop/Trangchu/SignUpIn");}
-                 else out.print("http://localhost:8080/springWebShop/SignUpIn");
-                %>">
+                </sec:authorize>
 
-                    <span style="color: #ee4d2d;"><%if(client!=null) out.print(client.getFullName());else out.print("Tài Khoản"); %> <i class="fa fa-user" aria-hidden="true"  style="font-size: 18px; display:contents"></i></span>
-                  </a>
+                <p class="control ">
+                <sec:authorize access="hasRole('CLIENT')">
+                	<a class="button is-primary account" href="<c:url value="/Account"/>">
+                	<span style="color: #ee4d2d;">${client.fullName}<i class="fa fa-user" aria-hidden="true"  style="font-size: 18px; display:contents"></i></span>
+                	</a>
+                	
+                </sec:authorize>
+                <sec:authorize access="hasRole('SHOP')">
+                	<a class="button is-primary account" href="<c:url value="/OwnerShop"/>">
+                	<span style="color: #ee4d2d;">${shop.fullName}<i class="fa fa-user" aria-hidden="true"  style="font-size: 18px; display:contents"></i></span>
+                	</a>
+                	
+                </sec:authorize>
+                <sec:authorize access="hasRole('ADMIN')">
+                	<a class="button is-primary account" href="<c:url value="/Admin"/>">
+                	<span style="color: #ee4d2d;">ADMIN<i class="fa fa-user" aria-hidden="true"  style="font-size: 18px; display:contents"></i></span>
+                	</a>
+                	
+                </sec:authorize>
+                <sec:authorize access="!isAuthenticated()">
+                	<a class="button is-primary account" href="<c:url value="/Trangchu/SignUpIn"/>">
+                	<span style="color: #ee4d2d;">Tài Khoản<i class="fa fa-user" aria-hidden="true"  style="font-size: 18px; display:contents"></i></span>
+                	</a>
+                </sec:authorize>
                 </p>
               </div>
             </div>

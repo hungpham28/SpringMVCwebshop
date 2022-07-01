@@ -174,7 +174,7 @@
               <a class="nav-link active" id="description-tab" data-toggle="tab" href="#description" role="tab" aria-controls="description" aria-selected="true">Mô Tả</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" id="review-tab" data-toggle="tab" href="#review" role="tab" aria-controls="review" aria-selected="false">Đánh Giá ${commentList.size()}</a>
+              <a class="nav-link" id="review-tab" data-toggle="tab" href="#review" role="tab" aria-controls="review" aria-selected="false">Đánh Giá (${commentList.size()})</a>
             </li>
         </ul>
         
@@ -186,10 +186,6 @@
               <div class="review-heading">Đánh Giá</div>
               <div>
               
-              <%
-                ClientEntity clientComment;
-
-              	%>
               	<c:forEach var="comment" items="${commentList}" varStatus="index">
               		<div>
               			<img alt="" src="http://windows79.com/wp-content/uploads/2021/02/Thay-the-hinh-dai-dien-tai-khoan-nguoi-dung-mac.png" width="60px">
@@ -203,7 +199,12 @@
               		
 			<c:if test="${commentList.size()==0}"><p class="mb-20">There are no reviews yet.</p></c:if>
               </div>
-              <form class="review-form" <%=client!=null ? "method=\"post\"":"action=\"SignUpIn\""%>>
+              <sec:authorize access="hasRole('ClIENT')">
+              	 <form class="review-form" method="post"/>
+              </sec:authorize>
+              <sec:authorize access="!hasRole('ClIENT')">
+              	 <form class="review-form" action="<c:url value="/SignUpIn"></c:url>"/>
+              </sec:authorize>
                   <div class="form-group">
                     <label>Đánh giá của bạn</label>
                     <div class="reviews-counter">

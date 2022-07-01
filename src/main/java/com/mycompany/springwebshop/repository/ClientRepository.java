@@ -20,5 +20,5 @@ import org.springframework.stereotype.Repository;
 public interface ClientRepository extends CrudRepository<ClientEntity, Long>{
 	  @Query(value="SELECT user,password FROM client ",nativeQuery = true)
 	  List<Object[]> findAllAccount();
-	  ClientEntity findByUser(String username);
+	  ClientEntity findByUser(String user);
 }

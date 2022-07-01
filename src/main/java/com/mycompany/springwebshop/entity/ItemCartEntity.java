@@ -4,6 +4,8 @@
  */
 package com.mycompany.springwebshop.entity;
 
+import java.util.Objects;
+
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -80,6 +82,26 @@ public class ItemCartEntity {
     public void setProduct(ProductEntity product) {
         this.product = product;
     }
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(client, feature, id, product, quantity);
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		ItemCartEntity other = (ItemCartEntity) obj;
+		return Objects.equals(client, other.client) && Objects.equals(feature, other.feature) && id == other.id
+				&& Objects.equals(product, other.product) && quantity == other.quantity;
+	}
+
+
     
 
 }

@@ -4,6 +4,7 @@ package com.mycompany.springwebshop.model;
 import com.mycompany.springwebshop.until.*;
 
 import java.util.List;
+import java.util.Set;
 
 import com.mycompany.springwebshop.entity.ClientEntity;
 import com.mycompany.springwebshop.entity.ItemCartEntity;
@@ -25,7 +26,7 @@ public class ClientDTO {
 
     private String image;
     
-    private List<ItemCartEntity> itemcartList;
+    private Set<ItemCartEntity> itemcartList;
     
     private String totalMoneyCart;
     
@@ -108,11 +109,11 @@ public class ClientDTO {
 		this.image = image;
 	}
 
-	public List<ItemCartEntity> getItemcartList() {
+	public Set<ItemCartEntity> getItemcartList() {
 		return itemcartList;
 	}
 
-	public void setItemcartList(List<ItemCartEntity> itemcartList) {
+	public void setItemcartList(Set<ItemCartEntity> itemcartList) {
 		this.itemcartList = itemcartList;
 	}
 
@@ -122,6 +123,13 @@ public class ClientDTO {
 
 	public void setTotalMoneyCart(String totalMoneyCart) {
 		this.totalMoneyCart = totalMoneyCart;
+	}
+
+	@Override
+	public String toString() {
+		return "ClientDTO [id=" + id + ", money=" + money + ", fullName=" + fullName + ", birthday=" + birthday
+				+ ", address=" + address + ", phone=" + phone + ", image=" + image + ", itemcartList=" + itemcartList
+				+ ", totalMoneyCart=" + totalMoneyCart + "]";
 	}
     
     

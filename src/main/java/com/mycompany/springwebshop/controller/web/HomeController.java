@@ -50,13 +50,10 @@ public class HomeController {
     @Autowired
     private ClientService clientService;
     
-    @Autowired
-    private SessionBean session;
     
     @RequestMapping(value = {"/","/Trangchu"}, method = RequestMethod.GET)
     public ModelAndView homePage() {
         ModelAndView mav = new ModelAndView("Home");
-        System.out.println("OK");
         mav.addObject("shopList",shopService.getShops());
         return mav;
     }
@@ -71,19 +68,21 @@ public class HomeController {
         return mav;
     }
 
-    @PostMapping("/j_spring_security_check")
-	public void postLogin(Authentication authentication,Principal principal,HttpSession httpSession) {
-    	System.out.println(clientService.getUserDTOByUsername(principal.getName()));
-    		session.setAttribute("AccountDetatils", clientService.getUserDTOByUsername(principal.getName()));
-	}
     @RequestMapping(value = "/SignUpIn", method = RequestMethod.GET)
     public ModelAndView LoginRegistPage() {
         ModelAndView mav = new ModelAndView("SignUp-In/SignUpIn");
-        
+        System.out.println(1);
 	    mav.addObject("user", new ClientDTO());
 	    mav.addObject("shop", new ShopDTO());
-	    session.addAttribute("eror", null);
         return mav;
+    }
+    @RequestMapping(value = "/loginSuccessStatus", method = RequestMethod.GET)
+    public String LoginPage(Authentication authentication,HttpSession session) {
+    	String username=authentication.getName();
+    	ClientDTO client=clientService.getUserDTOByUsername(username);
+    	session.setAttribute("client", clientService.getUserDTOByUsername(username));
+        session.setAttribute("itemCartList", client.getItemcartList() );
+        return "redirect:/Trangchu";
     }
     @RequestMapping(value = "/logoutSuccessful", method = RequestMethod.GET)
     public String LogoutPage() {
@@ -96,10 +95,9 @@ public class HomeController {
     @GetMapping("/User/Cart")
     public ModelAndView CartPage() {
         ModelAndView mav = new ModelAndView("ActionDataPage/Cart");
-        ClientDTO client=(ClientDTO) session.getAttribute("AccountDetatils");
         mav.addObject("FormNumber",new FormNumber());
         mav.addObject("subTotal",(long)0);
-        session.setAttribute("itemCartList", client.getItemcartList() );
+
         return mav;
     }
 //    @RequestMapping(value = "/SignUpIn", method = RequestMethod.POST)

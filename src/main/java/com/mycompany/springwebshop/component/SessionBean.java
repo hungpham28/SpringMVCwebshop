@@ -3,9 +3,11 @@ package com.mycompany.springwebshop.component;
 import java.util.HashMap;
 import java.util.Map;
 
+import com.mycompany.springwebshop.model.ClientDTO;
+
 public class SessionBean {
 	public Map<String, Object> session=new HashMap<String, Object>();
-
+	public ClientDTO clientDetails;
 	public Map<String, Object> getSession() {
 		return session;
 	}
@@ -25,6 +27,14 @@ public class SessionBean {
 	}
 	public Object getAttribute(String namePara) {
 		return this.session.get(namePara);
+	}
+
+	public ClientDTO getClientDetails() {
+		return clientDetails;
+	}
+
+	public void setClientDetails(ClientDTO clientDetails) {
+		this.clientDetails = clientDetails;
 	}
 	
 }
