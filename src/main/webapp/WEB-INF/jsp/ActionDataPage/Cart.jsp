@@ -78,7 +78,35 @@
     </section>
 
   </div>
-<c:set var="tax" value="0" />
+  <footer id="site-footer">
+    <div class="container clearfix">
+      <div class="left">
+      <c:set var="tax" value="${Math.round(client.subtotal*0.02)}"></c:set>
+      <c:set var="total" value="${client.subtotal+20000+tax}"></c:set>
+        <h2 class="subtotal">Subtotal: <span>${FormNumber.formMoney(client.subtotal)}</span>đ</h2>
+        <h3 class="tax">Taxes (2%): <span>${FormNumber.formMoney(tax)}</span>đ</h3>
+        <h3 class="shipping">Shipping: <span>20.000</span>đ</h3>
+      </div>
+
+      <div class="right">
+        <h1 class="total">Total: <span>
+        <c:if test="${client.sizeCart==0}">0</c:if>
+        <c:if test="${client.sizeCart!=0}">${FormNumber.formMoney(total)}</c:if>
+        </span>đ</h1>
+        <c:if test="${client.sizeCart!=0}">
+        <c:choose>
+        	<c:when test="${total<=FormNumber.formMoneytoInteger(client.money)}">
+        		<button class="btn btn-success" style="width: 100%">Checkout</button>
+        	</c:when>
+        	<c:otherwise ><button class="btn btn-eror" style="width: 100%">Checkout</button> </c:otherwise>
+        </c:choose>
+        </c:if>
+        <c:if test="${client.sizeCart==0}"><button class="btn" style="width: 100%">Checkout</button></c:if>
+      </div>
+      
+
+    </div>
+  </footer>
 
   <div id="notify" class="close">
   <div id="success-box" class="close">
@@ -92,7 +120,7 @@
     </div>
     <div class="shadow scale"></div>
     <div class="message"><h1 class="alert">Success!</h1><p>Cảm ơn bạn đã sử dụng dịch vụ của chúng tôi!</p></div>
-    <a href="User/Payment/Pay-Bill"><input name="totalMoney" style="display: none" value="${client.totalMoneyCart}"> <button class="button-box"><h1 class="green">Xác Nhận</h1></button></a> 
+    <a href="User/Payment/Pay-Bill"><input name="totalMoney" style="display: none" value="${total}"> <button class="button-box"><h1 class="green">Xác Nhận</h1></button></a> 
   </div>
   <div id="error-box" class="close">
     <div class="dot"></div>

@@ -30,6 +30,7 @@ public class ClientDTO {
     String image;
     
     List<ItemCartEntity> itemcartList;
+    String subtotal;
     
     String totalMoneyCart;
     
@@ -139,6 +140,14 @@ public class ClientDTO {
 
 	public int getSizeCart() {
 		return sizeCart;
+	}
+	
+	public String getSubtotal() {
+		return subtotal;
+	}
+
+	public void setSubtotal(String subtotal) {
+		this.subtotal = subtotal;
 	}
 
 	@Override

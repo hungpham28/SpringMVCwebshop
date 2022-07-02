@@ -18,7 +18,7 @@ import com.mycompany.springwebshop.service.CommentService;
 import com.mycompany.springwebshop.service.OwnerShopService;
 import com.mycompany.springwebshop.service.ProductService;
 import com.mycompany.springwebshop.until.FormNumber;
-import com.mysql.cj.Session;
+
 
 import java.security.Principal;
 import java.util.ArrayList;
@@ -100,8 +100,7 @@ public class HomeController {
 		for (ItemCartEntity item: itemList) {
 			total+=(item.getQuantity())*Long.parseLong(item.getProduct().getSalePrice());
 		}
-		client.setTotalMoneyCart(FormNumber.formMoney(Long.toString(total+Math.round(total*0.02))));
-		client.setTax(FormNumber.formMoney(Long.toString(Math.round(total*0.02))));
+		client.setSubtotal(Long.toString(total));
 		client.setSizeCart(itemList.size());
     	session.setAttribute("client", client);
         return "redirect:/Trangchu";
@@ -112,16 +111,14 @@ public class HomeController {
 //    	cartService.saveItemCartList(client.getItemcartList());
         return "redirect:/Trangchu";
     }
-    @RequestMapping(value = "/403", method = RequestMethod.GET)
+    @RequestMapping(value = {"/403","/errors"}, method = RequestMethod.GET)
     public String accessDenied() {   
         return "Eror";
     }
     @GetMapping("/User/Cart")
     public ModelAndView CartPage() {
         ModelAndView mav = new ModelAndView("ActionDataPage/Cart");
-<<<<<<< HEAD
         mav.addObject("FormNumber",new FormNumber());
-        mav.addObject("subTotal",0);
 
         return mav;
     }
@@ -198,12 +195,6 @@ public class HomeController {
     	cartService.saveItemCartList(client.getItemcartList());
     	return "redirect:/User/Cart";
     }
-=======
-        mav.addObject("FormNumber",new FormNumber());xScoped variables from session scope
-        mav.addObject("subTotal",(long)0);
 
-        return mav;
-    }
->>>>>>> 70c4b0892e65eb2b6afa157aa5dbc7739ef09b5a
 
 }
