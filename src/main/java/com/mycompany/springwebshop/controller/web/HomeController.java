@@ -119,6 +119,7 @@ public class HomeController {
     @GetMapping("/User/Cart")
     public ModelAndView CartPage() {
         ModelAndView mav = new ModelAndView("ActionDataPage/Cart");
+<<<<<<< HEAD
         mav.addObject("FormNumber",new FormNumber());
         mav.addObject("subTotal",0);
 
@@ -197,5 +198,12 @@ public class HomeController {
     	cartService.saveItemCartList(client.getItemcartList());
     	return "redirect:/User/Cart";
     }
+=======
+        mav.addObject("FormNumber",new FormNumber());xScoped variables from session scope
+        mav.addObject("subTotal",(long)0);
+
+        return mav;
+    }
+>>>>>>> 70c4b0892e65eb2b6afa157aa5dbc7739ef09b5a
 
 }
