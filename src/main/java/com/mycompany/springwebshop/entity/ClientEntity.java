@@ -48,14 +48,14 @@ public class ClientEntity {
     private String phone;
     @Column(name = "image")
     private String image;
-    @OneToMany(mappedBy = "client", fetch = FetchType.EAGER)
-    private Set<ItemCartEntity> itemcartList;
+    @OneToMany(mappedBy = "client", fetch = FetchType.LAZY)
+    private List<ItemCartEntity> itemcartList;
 
     @OneToOne(mappedBy = "client")
     private PaymentEntity payment;
     
-    @OneToOne(mappedBy = "client")
-    private CommentEntity comment;
+    @OneToMany(mappedBy = "client",fetch = FetchType.LAZY)
+    private List<CommentEntity> commentList;
     public ClientEntity() {
     }
 
@@ -131,11 +131,11 @@ public class ClientEntity {
         this.image = image;
     }
 
-    public Set<ItemCartEntity> getItemcartList() {
+    public List<ItemCartEntity> getItemcartList() {
         return itemcartList;
     }
 
-    public void setItemcartList(Set<ItemCartEntity> itemcartList) {
+    public void setItemcartList(List<ItemCartEntity> itemcartList) {
         this.itemcartList = itemcartList;
     }
 
@@ -147,12 +147,12 @@ public class ClientEntity {
         this.payment = payment;
     }
 
-    public CommentEntity getComment() {
-        return comment;
+    public List<CommentEntity> getCommentList() {
+        return commentList;
     }
 
-    public void setComment(CommentEntity comment) {
-        this.comment = comment;
+    public void setCommentList(List<CommentEntity> commentList) {
+        this.commentList = commentList;
     }
 
 	@Override
@@ -160,7 +160,7 @@ public class ClientEntity {
 		return "ClientEntity [id=" + id + ", user=" + user + ", password=" + password + ", money=" + money
 				+ ", fullName=" + fullName + ", birthday=" + birthday + ", address=" + address + ", phone=" + phone
 				+ ", image=" + image + ", itemcartList=" + itemcartList + ", payment=" + payment + ", comment="
-				+ comment + "]";
+				+ commentList + "]";
 	}
 
     

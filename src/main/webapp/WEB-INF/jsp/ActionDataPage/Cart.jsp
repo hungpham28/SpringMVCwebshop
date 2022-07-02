@@ -29,20 +29,22 @@
   <link href="<c:url value="/resources/style/assets/css/stylePageCart.css"/>" rel="stylesheet" />
       
   <header id="site-header">
-    <div class="container">
-      <h1>Shopping cart <span>[</span> <em><a href="" target="_blank">CodePen Challange</a></em> <span class="last-span is-open">]</span></h1>
+    <div class="container d-flex flex-wrap">
+      <h1>Shopping cart <span>[</span> <em><a href="" target="_blank">CodePen Challange</a></em> <span class="last-span is-open">]</span>
+      <a href="Cart/save" class="btn" >SAVE CART</a></h1>
     </div>
   </header>
 
   <div class="container">
     <section id="cart"> 
-     <c:forEach var="cart" items="${itemCartList}">
+     <c:forEach var="cart" items="${client.itemcartList}">
+     <c:if test="${cart.quantity!=0}">
      <c:set var="product"  value="${cart.product}"></c:set>
      <c:set var="shop" value="${product.shop}"/>
      
       <article class="product">
         <header>
-          <a href="GioHang?cartID=${cart.id}&actionCart=remove" class="remove">
+          <a href="Cart/update?item_Id=${cart.id}&actionCart=remove" class="remove">
             <img src="${product.url}" alt="">
 
             <h3>Remove product</h3>
@@ -58,9 +60,9 @@
         </div>
 
         <footer class="content">
-          <a href="GioHang?cartID=${cart.id}&actionCart=minus&quantity=cart.getQuantity()"><span class="qt-minus">-</span></a>
+          <a href="Cart/update?item_Id=${cart.id}&actionCart=minus"><span class="qt-minus">-</span></a>
           <span class="qt">${cart.quantity}</span>
-          <a href="GioHang?cartID=${cart.id}&actionCart=plus&quantity=${cart.quantity}"><span class="qt-plus">+</span></a>
+          <a href="Cart/update?item_Id=${cart.id}&actionCart=plus"><span class="qt-plus">+</span></a>
 
           <h2 class="full-price">
           	${FormNumber.formMoney(product.salePrice*cart.quantity)}đ
@@ -71,6 +73,7 @@
           </h2>
         </footer>
       </article>
+    </c:if>
 </c:forEach>
     </section>
 
@@ -89,7 +92,7 @@
     </div>
     <div class="shadow scale"></div>
     <div class="message"><h1 class="alert">Success!</h1><p>Cảm ơn bạn đã sử dụng dịch vụ của chúng tôi!</p></div>
-    <form method="post"><input name="totalMoney" style="display: none" value="<%=0+0+20000%>"> <button class="button-box"><h1 class="green">Xác Nhận</h1></button></form> 
+    <a href="User/Payment/Pay-Bill"><input name="totalMoney" style="display: none" value="${client.totalMoneyCart}"> <button class="button-box"><h1 class="green">Xác Nhận</h1></button></a> 
   </div>
   <div id="error-box" class="close">
     <div class="dot"></div>

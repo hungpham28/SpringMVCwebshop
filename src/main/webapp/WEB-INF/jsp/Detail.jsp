@@ -174,7 +174,7 @@
               <a class="nav-link active" id="description-tab" data-toggle="tab" href="#description" role="tab" aria-controls="description" aria-selected="true">Mô Tả</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" id="review-tab" data-toggle="tab" href="#review" role="tab" aria-controls="review" aria-selected="false">Đánh Giá (${commentList.size()})</a>
+              <a class="nav-link" id="review-tab" data-toggle="tab" href="#review" role="tab" aria-controls="review" aria-selected="false">Đánh Giá (${commentList.size()}<c:if test="${commentList==null}">0</c:if>)</a>
             </li>
         </ul>
         

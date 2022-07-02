@@ -12,6 +12,7 @@ import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
+import com.mycompany.springwebshop.entity.ItemCartEntity;
 import com.mycompany.springwebshop.model.ClientDTO;
 import com.mycompany.springwebshop.repository.ClientRepository;
 
@@ -25,9 +26,10 @@ public class ClientService {
 	private ClientRepository clientRepository;
 	
 	public  ClientDTO getUserDTOByUsername(String username) {
-//		System.out.println(clientRepository.findByUser(username));
 		return new ClientDTO(clientRepository.findByUser(username));
 	}
+	
+
     public List<UserDetails> getAllAccountOfShop(){
     	List<UserDetails> accountList=new ArrayList<UserDetails>();
     	clientRepository.findAllAccount().forEach(objects -> accountList.add(
@@ -37,5 +39,13 @@ public class ClientService {
                 .roles("CLIENT")
                 .build()));
     	return accountList;
+    }
+    public List<ItemCartEntity> getItemCartList(long id){
+    	try {
+			return  clientRepository.findByIdAndFetchItemcartListEager(id).getItemcartList();
+		} catch (Exception e) {
+			return null;
+			// TODO: handle exception
+		}
     }
 }

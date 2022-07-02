@@ -29,7 +29,7 @@ public class CommentEntity {
     private String comment;
     @Column(name="datetime")
     private String datetime;
-    @OneToOne(cascade = {CascadeType.ALL})
+    @ManyToOne
     @JoinColumn
     private ClientEntity client;
     @ManyToOne

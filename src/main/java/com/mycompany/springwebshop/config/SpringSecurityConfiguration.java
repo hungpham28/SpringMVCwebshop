@@ -47,7 +47,7 @@ public class SpringSecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .passwordParameter("password")
                 
                 // Cấu hình cho Logout Page.
-                .and().logout().logoutUrl("/logout").logoutSuccessUrl("/logoutSuccessful")
+                .and().logout().logoutUrl("/logout").logoutSuccessUrl("/logoutSuccessful").permitAll()
                 .and().csrf().disable();
     }
 

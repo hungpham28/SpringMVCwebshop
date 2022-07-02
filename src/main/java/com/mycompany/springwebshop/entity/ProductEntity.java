@@ -43,13 +43,13 @@ public class ProductEntity {
     @ManyToOne
     @JoinColumn
     private ShopEntity shop;
-    @OneToOne(mappedBy = "product")
-    private ItemCartEntity itemcart;
+    @OneToMany(mappedBy = "product",fetch = FetchType.LAZY)
+    private List<ItemCartEntity> itemcartList;
     @ManyToOne
     @JoinColumn
     private CategoryEntity category;
-    @OneToMany(mappedBy = "product", fetch = FetchType.EAGER)
-    private List<CommentEntity> commentsList;
+    @OneToMany(mappedBy = "product", fetch = FetchType.LAZY)
+    private List<CommentEntity> commentList;
     public ProductEntity() {
     }
 
@@ -109,12 +109,12 @@ public class ProductEntity {
         this.shop = shop;
     }
 
-    public ItemCartEntity getItemcart() {
-        return itemcart;
+    public List<ItemCartEntity> getItemcartList() {
+        return itemcartList;
     }
 
-    public void setItemcart(ItemCartEntity itemcart) {
-        this.itemcart = itemcart;
+    public void setItemcartList(List<ItemCartEntity> itemcart) {
+        this.itemcartList = itemcart;
     }
 
     public CategoryEntity getCategory() {
@@ -126,11 +126,11 @@ public class ProductEntity {
     }
 
     public List<CommentEntity> getCommentsList() {
-        return commentsList;
+        return commentList;
     }
 
     public void setCommentsList(List<CommentEntity> commentsList) {
-        this.commentsList = commentsList;
+        this.commentList = commentsList;
     }
     
 }

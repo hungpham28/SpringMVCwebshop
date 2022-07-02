@@ -4,7 +4,10 @@
  */
 package com.mycompany.springwebshop.service;
 
+import com.mycompany.springwebshop.entity.CommentEntity;
+import com.mycompany.springwebshop.entity.ItemCartEntity;
 import com.mycompany.springwebshop.entity.ProductEntity;
+import com.mycompany.springwebshop.model.ClientDTO;
 import com.mycompany.springwebshop.model.ProductDTO;
 import com.mycompany.springwebshop.repository.ProductRepository;
 
@@ -31,5 +34,16 @@ public class ProductService {
     }
     public ProductDTO getProductByID(Long id){
         return new ProductDTO(productRepository.findById(id).orElse(null));
+    }
+    public List<ItemCartEntity> getItemCartList(long id){
+    	return productRepository.findByIdAndFetchItemcartListEager(id).getItemcartList();
+    }
+    public List<CommentEntity> getCommentList(long id){
+    	try {
+    		return productRepository.findByIdAndFetchCommentListEager(id).getCommentsList();
+		} catch (Exception e) {
+			return null;
+		}
+    	
     }
 }

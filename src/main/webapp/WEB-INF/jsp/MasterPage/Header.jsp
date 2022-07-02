@@ -226,7 +226,7 @@ padding: 0;
             <a class="navbar-item" href="<c:url value="/User/Cart"/>"  style="color: #FFFF ;">
             <sec:authorize access="hasRole('CLIENT')">
               <span style="height: 18px;background-color: darkorange; width: 18px; border-radius: 50%;position: absolute; left: 0;top: 10px; font-size: small;
-              font-size: small;text-align: center;">${itemCartList.size()}</span>
+              font-size: small;text-align: center;">${client.sizeCart}</span>
               </sec:authorize>
               Giỏ Hàng<i class="fa fa-shopping-cart" aria-hidden="true" style="font-size: 18px;"></i>
             </a>

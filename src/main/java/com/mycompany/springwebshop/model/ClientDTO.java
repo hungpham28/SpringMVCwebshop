@@ -6,30 +6,36 @@ import com.mycompany.springwebshop.until.*;
 import java.util.List;
 import java.util.Set;
 
+import org.springframework.beans.factory.annotation.Autowired;
+
 import com.mycompany.springwebshop.entity.ClientEntity;
 import com.mycompany.springwebshop.entity.ItemCartEntity;
+import com.mycompany.springwebshop.service.ClientService;
 
 
 public class ClientDTO {
-	
-    private long id;
 
-    private String money;
+    long id;
 
-    private String fullName;
+    String money;
 
-    private String birthday;
+    String fullName;
 
-    private String address;
+    String birthday;
 
-    private String phone;
+    String address;
 
-    private String image;
+    String phone;
+
+    String image;
     
-    private Set<ItemCartEntity> itemcartList;
+    List<ItemCartEntity> itemcartList;
     
-    private String totalMoneyCart;
+    String totalMoneyCart;
     
+    String tax;
+    
+    int sizeCart;
 	public ClientDTO(ClientEntity client) {
 		if(client!=null) {
 			this.setId(client.getId());
@@ -39,12 +45,6 @@ public class ClientDTO {
 			this.setAddress(client.getAddress());
 			this.setPhone(client.getPhone());
 			this.setImage(client.getImage());
-//			List<ItemCartEntity> itemList=client.getItemcartList();
-			this.setItemcartList(client.getItemcartList());
-//			long total=0;
-//			for (ItemCartEntity item: itemList) {
-//				total+=item.getQuantity()*(item.getProduct().getSalePrice()
-//			}
 		}
 	}
 
@@ -109,11 +109,11 @@ public class ClientDTO {
 		this.image = image;
 	}
 
-	public Set<ItemCartEntity> getItemcartList() {
+	public List<ItemCartEntity> getItemcartList() {
 		return itemcartList;
 	}
 
-	public void setItemcartList(Set<ItemCartEntity> itemcartList) {
+	public void setItemcartList(List<ItemCartEntity> itemcartList) {
 		this.itemcartList = itemcartList;
 	}
 
@@ -124,6 +124,22 @@ public class ClientDTO {
 	public void setTotalMoneyCart(String totalMoneyCart) {
 		this.totalMoneyCart = totalMoneyCart;
 	}
+	
+	public String getTax() {
+		return tax;
+	}
+
+	public void setTax(String tax) {
+		this.tax = tax;
+	}
+	
+	public void setSizeCart(int sizeCart) {
+		this.sizeCart = sizeCart;
+	}
+
+	public int getSizeCart() {
+		return sizeCart;
+	}
 
 	@Override
 	public String toString() {
@@ -131,6 +147,7 @@ public class ClientDTO {
 				+ ", address=" + address + ", phone=" + phone + ", image=" + image + ", itemcartList=" + itemcartList
 				+ ", totalMoneyCart=" + totalMoneyCart + "]";
 	}
+
     
     
 }

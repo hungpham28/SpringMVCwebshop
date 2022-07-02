@@ -1,7 +1,4 @@
-<%@page import="com.mycompany.springwebshop.entity.ShopEntity"%>
-<%@page import="com.mycompany.springwebshop.entity.ProductEntity"%>
-<%@page import="java.util.ArrayList"%>
-<%@page import="java.util.List"%>
+<%@taglib uri="http://www.springframework.org/tags/form" prefix="form"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
@@ -10,8 +7,8 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Document</title>
 <script
@@ -238,7 +235,6 @@
 
 				<div class="Products Shop${shop.id}">
         <c:forEach var="product" items="${productList}" varStatus="index">
-        
 					<a class="Product" href="Product/${product.id}">
 						<div>
 							<span class="sale <c:if test="${product.originalPrice == product.salePrice }">close</c:if>">
@@ -264,11 +260,15 @@
 								</div>
 								<div>
 								<sec:authorize access="hasRole('CLIENT')">
-									<form method='post'>
-									  <input style='display: none' name='clientID' value="${client.id}">
-	                                  <input style='display: none' name='productID' value="${product.id}">
-	                                  <button class='btn btn--buyticket js--btn--buyticket'>Buy Now<i class='fa fa-cart-plus' aria-hidden='true' style='margin-left: 5px;'></i></button>
-									</form>
+								<form:form method="POST"  modelAttribute="itemCart">
+									<form:hidden path="id" />
+									<form:hidden path="feature" />
+									<form:hidden path="quantity" value="1"/>
+									<form:hidden path="product.id" value="${product.id}"/>
+									<form:hidden path="client.id" value="${client.id}"/>
+	                                <form:button  class='btn btn--buyticket js--btn--buyticket' > 
+	                                  Buy Now<i class='fa fa-cart-plus' aria-hidden='true' style='margin-left: 5px;'></i></form:button>
+	                             </form:form>
 								</sec:authorize>
 								<sec:authorize access="!hasRole('CLIENT')">
 	                               <button class='btn btn--buyticket js--btn--buyticket' onclick="window.location.href="<c:url value="/SignUpIn" />"'>

@@ -5,25 +5,37 @@
 package com.mycompany.springwebshop.controller.web;
 
 import com.mycompany.springwebshop.component.SessionBean;
+import com.mycompany.springwebshop.entity.ClientEntity;
+import com.mycompany.springwebshop.entity.ItemCartEntity;
 import com.mycompany.springwebshop.entity.ProductEntity;
 import com.mycompany.springwebshop.entity.ShopEntity;
 import com.mycompany.springwebshop.model.ClientDTO;
 import com.mycompany.springwebshop.model.ProductDTO;
 import com.mycompany.springwebshop.model.ShopDTO;
+import com.mycompany.springwebshop.service.CartService;
 import com.mycompany.springwebshop.service.ClientService;
 import com.mycompany.springwebshop.service.CommentService;
 import com.mycompany.springwebshop.service.OwnerShopService;
 import com.mycompany.springwebshop.service.ProductService;
 import com.mycompany.springwebshop.until.FormNumber;
+import com.mysql.cj.Session;
 
 import java.security.Principal;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
+import java.util.ListIterator;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+import javax.transaction.Transactional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -49,12 +61,15 @@ public class HomeController {
     
     @Autowired
     private ClientService clientService;
-    
+
+    @Autowired
+    private CartService cartService;
     
     @RequestMapping(value = {"/","/Trangchu"}, method = RequestMethod.GET)
     public ModelAndView homePage() {
         ModelAndView mav = new ModelAndView("Home");
         mav.addObject("shopList",shopService.getShops());
+        mav.addObject("itemCart",new ItemCartEntity());
         return mav;
     }
 
@@ -64,14 +79,13 @@ public class HomeController {
         ProductDTO product=productService.getProductByID(id);
         mav.addObject("product",product);
       
-        mav.addObject("commentList",product.getCommentsList());
+        mav.addObject("commentList",productService.getCommentList(id));
         return mav;
     }
 
     @RequestMapping(value = "/SignUpIn", method = RequestMethod.GET)
     public ModelAndView LoginRegistPage() {
         ModelAndView mav = new ModelAndView("SignUp-In/SignUpIn");
-        System.out.println(1);
 	    mav.addObject("user", new ClientDTO());
 	    mav.addObject("shop", new ShopDTO());
         return mav;
@@ -80,12 +94,22 @@ public class HomeController {
     public String LoginPage(Authentication authentication,HttpSession session) {
     	String username=authentication.getName();
     	ClientDTO client=clientService.getUserDTOByUsername(username);
-    	session.setAttribute("client", clientService.getUserDTOByUsername(username));
-        session.setAttribute("itemCartList", client.getItemcartList() );
+    	List<ItemCartEntity> itemList=(List<ItemCartEntity>)clientService.getItemCartList(client.getId());
+		client.setItemcartList(itemList);
+		long total=0;
+		for (ItemCartEntity item: itemList) {
+			total+=(item.getQuantity())*Long.parseLong(item.getProduct().getSalePrice());
+		}
+		client.setTotalMoneyCart(FormNumber.formMoney(Long.toString(total+Math.round(total*0.02))));
+		client.setTax(FormNumber.formMoney(Long.toString(Math.round(total*0.02))));
+		client.setSizeCart(itemList.size());
+    	session.setAttribute("client", client);
         return "redirect:/Trangchu";
     }
     @RequestMapping(value = "/logoutSuccessful", method = RequestMethod.GET)
-    public String LogoutPage() {
+    public String LogoutPage(HttpSession session) {
+    	ClientDTO client=(ClientDTO) session.getAttribute("client");
+//    	cartService.saveItemCartList(client.getItemcartList());
         return "redirect:/Trangchu";
     }
     @RequestMapping(value = "/403", method = RequestMethod.GET)
@@ -96,65 +120,82 @@ public class HomeController {
     public ModelAndView CartPage() {
         ModelAndView mav = new ModelAndView("ActionDataPage/Cart");
         mav.addObject("FormNumber",new FormNumber());
-        mav.addObject("subTotal",(long)0);
+        mav.addObject("subTotal",0);
 
         return mav;
     }
-//    @RequestMapping(value = "/SignUpIn", method = RequestMethod.POST)
-//    public ModelAndView LoginRegistPostPage(HttpSession session,HttpServletRequest req) {
-//        ModelAndView mav = new ModelAndView("SignUp-In/SignUpIn");
-//	    req.setAttribute("eror", null);
-//        String accountRegist=(String)req.getParameter("account");
-//	    String user=null,pass = null;
-//	    HttpSession ses=req.getSession();
-//		user=(String)req.getParameter("user");
-//		pass=(String)req.getParameter("password");
-//	    switch (accountRegist) {
-//	    case "SignUp":
-//	    	switch (accountRegist) {
-//				case "client":
-//
-//					String name=(String)req.getParameter("fullName");
-//					String address=(String)req.getParameter("address");
-//					String phone=(String)req.getParameter("phone");
-//					String birthday=(String)req.getParameter("birthday");
-//					Client client=new Client(0,user,pass,"0",name,birthday,address,phone,null);
-//					ClientService.addClientToData(client, "client");
-//					ses.setAttribute("accesser","user");
-//					ses.setAttribute("user", client);
-//					resp.sendRedirect(req.getContextPath()+"/Trangchu");
-//					break;
-//				case "shop":
-//					String nameShop=(String)req.getParameter("nameShop");
-//					String urlAvatar=(String)req.getParameter("urlAvatar");
-//					Shop shop=new Shop(0, user, pass, nameShop,urlAvatar);
-//					OwnerShopService.addShopToData(shop, "shop");
-//					ses.setAttribute("accesser","shop");
-//					ses.setAttribute("shop", shop);
-//					resp.sendRedirect(req.getContextPath()+"/Trangchu/OwnerShop");
-//					break;
-//	    	}
-//	    	break;
-//	    }
-//        return mav;
-//    }
-//
-//    @RequestMapping(value = "/Trangchu", method = RequestMethod.GET)
-//    public ModelAndView homePage() {
-//        ModelAndView mav = new ModelAndView("home");
-//        return mav;
-//    }
-//
-//    @RequestMapping(value = "/Trangchu", method = RequestMethod.GET)
-//    public ModelAndView homePage() {
-//        ModelAndView mav = new ModelAndView("home");
-//        return mav;
-//    }
-//
-//    @RequestMapping(value = "/Trangchu", method = RequestMethod.GET)
-//    public ModelAndView homePage() {
-//        ModelAndView mav = new ModelAndView("home");
-//        return mav;
-//    }
+    
+    @PostMapping(value = {"/","/Trangchu"})
+    public String AddItemCart(@ModelAttribute ItemCartEntity itemCart,HttpSession session) {
+    	ClientDTO client=(ClientDTO) session.getAttribute("client");
+    	List<ItemCartEntity> itemList=client.getItemcartList();
+    	for(ItemCartEntity item: itemList) {
+    		if(item.getProduct().getId()==itemCart.getProduct().getId() && item.getClient().getId()==itemCart.getClient().getId()) {
+    			itemCart.setId(item.getId());
+    			itemCart.setQuantity(item.getQuantity()+1);
+    			break;
+    		}
+    	}
+    	cartService.saveItemCart(itemCart);
+    	itemList=clientService.getItemCartList(client.getId());
+    	client.setSizeCart(itemList.size());
+    	client.setItemcartList(itemList);
+    	session.setAttribute("client", client);
+        return "redirect:/Trangchu";
+    }
+    
+    @GetMapping("/User/Cart/update")
+    public String ActionCart(@RequestParam(name = "item_Id") int item_Id,@RequestParam(name = "actionCart") String actionCart, HttpSession session) {
+    	
+    	ClientDTO client=(ClientDTO) session.getAttribute("client");
+    	ListIterator<ItemCartEntity> iterator=client.getItemcartList().listIterator();
+    	ItemCartEntity item;
+	    switch (actionCart) {
+		case "remove":
+			while (iterator.hasNext()) {
+				item = (ItemCartEntity) iterator.next();
+				if(item.getId()==item_Id) {
+					item.setQuantity(0);
+					client.setSizeCart(client.getSizeCart()-1);
+					break;
+				}
+			}
+			break;
+		case "plus":
+			while (iterator.hasNext()) {
+				item = (ItemCartEntity) iterator.next();
+				if(item.getId()==item_Id) {
+					item.setQuantity(item.getQuantity()+1);
+					iterator.set(item);
+					break;
+				}
+			}
+			break;
+		case "minus":
+			while (iterator.hasNext()) {
+				item = (ItemCartEntity) iterator.next();
+				if(item.getId()==item_Id) {
+					if(item.getQuantity()<=1) {
+						item.setQuantity(0); 
+						client.setSizeCart(client.getSizeCart()-1);
+						break;
+					}else if(item.getQuantity()>1) {
+						item.setQuantity(item.getQuantity()-1);
+						break;
+					}
+				}
+			}
+		default:
+			break;
+		}
+	    session.setAttribute("client", client);
+    	return "redirect:/User/Cart";
+    }
+    @GetMapping("/User/Cart/save")
+    public String ActionSaveCart( HttpSession session) {
+    	ClientDTO client=(ClientDTO)session.getAttribute("client");
+    	cartService.saveItemCartList(client.getItemcartList());
+    	return "redirect:/User/Cart";
+    }
 
 }
